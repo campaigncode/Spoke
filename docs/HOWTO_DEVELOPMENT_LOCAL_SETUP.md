@@ -32,17 +32,11 @@ cd Spoke
    nvm use node
    ```
 
-2. Install yarn.
-
+2. Install the packages.
    ```
-   corepack enable
+   npm i
    ```
-
-3. Install the packages.
-   ```
-   yarn install
-   ```
-4. Create a real environment file:
+3. Create a real environment file:
    ```
    cp .env.example .env
    ```

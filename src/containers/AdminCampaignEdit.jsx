@@ -415,7 +415,6 @@ export class AdminCampaignEditBase extends React.Component {
         expandableBySuperVolunteers: true,
         checkCompleted: () =>
           this.state.campaignFormValues.title !== "" &&
-          this.state.campaignFormValues.description !== "" &&
           this.state.campaignFormValues.dueBy !== null
       },
       {
