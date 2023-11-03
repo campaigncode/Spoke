@@ -32,6 +32,7 @@ import CampaignMessagingServiceForm from "../components/CampaignMessagingService
 import CampaignContactsChoiceForm from "../components/CampaignContactsChoiceForm";
 import CampaignTextersForm from "../components/CampaignTextersForm";
 import CampaignInteractionStepsForm from "../components/CampaignInteractionStepsForm";
+import CampaignVanInteractionForm from "../components/CampaignVanInteractionForm";
 import CampaignCannedResponsesForm from "../components/CampaignCannedResponsesForm";
 import CampaignDynamicAssignmentForm from "../components/CampaignDynamicAssignmentForm";
 import CampaignTexterUIForm from "../components/CampaignTexterUIForm";
@@ -415,6 +416,24 @@ export class AdminCampaignEditBase extends React.Component {
         checkCompleted: () =>
           this.state.campaignFormValues.title !== "" &&
           this.state.campaignFormValues.description !== "" &&
+          this.state.campaignFormValues.dueBy !== null
+      },
+      {
+        title: "VAN Integration",
+        content: CampaignVanInteractionForm,
+        keys: [
+          "title",
+          "description",
+          "dueBy",
+          "logoImageUrl",
+          "primaryColor",
+          "introHtml"
+        ],
+        blocksStarting: true,
+        expandAfterCampaignStarts: true,
+        expandableBySuperVolunteers: true,
+        checkCompleted: () =>
+          this.state.campaignFormValues.title !== "" &&
           this.state.campaignFormValues.dueBy !== null
       },
       {
@@ -1048,7 +1067,6 @@ export class AdminCampaignEditBase extends React.Component {
                   <Button
                     variant="contained"
                     color="secondary"
-                    variant="outlined"
                     startIcon={<CancelIcon />}
                     onClick={() => this.handleDeleteJob(jobId)}
                   >
