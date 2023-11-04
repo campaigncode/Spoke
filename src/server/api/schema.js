@@ -665,7 +665,8 @@ const rootMutations = {
 
       const organization = await loaders.organization.load(organizationId);
 
-      const passportStrategy = getConfig("PASSPORT_STRATEGY", organization) || "auth0";
+      const passportStrategy =
+        getConfig("PASSPORT_STRATEGY", organization) || "auth0";
       if (passportStrategy === "auth0") {
         const { email } = await r
           .knex("user")
@@ -830,6 +831,7 @@ const rootMutations = {
         organization_id: campaign.organizationId,
         creator_id: user.id,
         title: campaign.title,
+        van_campaign_id: campaign.vanId || null,
         description: campaign.description,
         due_by: campaign.dueBy,
         is_started: false,
@@ -862,6 +864,7 @@ const rootMutations = {
         title: "COPY - " + campaign.title.replace(/\s*template\W*/i, ""),
         description: campaign.description,
         due_by: campaign.due_by,
+        van_campaign_id: campaign.van_campaign_id,
         features: campaign.features,
         intro_html: campaign.intro_html,
         primary_color: campaign.primary_color,

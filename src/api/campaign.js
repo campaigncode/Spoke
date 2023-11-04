@@ -99,6 +99,7 @@ export const schema = gql`
     isStarted: Boolean
     isStarting: Boolean
     isArchived: Boolean
+    vanCampaignId: String
     isArchivedPermanently: Boolean
     creator: User
     texters: [User]

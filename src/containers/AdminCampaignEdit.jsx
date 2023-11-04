@@ -65,6 +65,7 @@ const campaignInfoFragment = `
   textingHoursEnforced
   textingHoursStart
   textingHoursEnd
+  vanCampaignId
   texterUIConfig {
     options
     sideboxChoices
@@ -420,20 +421,11 @@ export class AdminCampaignEditBase extends React.Component {
       {
         title: "VAN Integration",
         content: CampaignVanInteractionForm,
-        keys: [
-          "title",
-          "description",
-          "dueBy",
-          "logoImageUrl",
-          "primaryColor",
-          "introHtml"
-        ],
-        blocksStarting: true,
+        keys: ["vanCampaignId"],
+        blocksStarting: false,
         expandAfterCampaignStarts: true,
         expandableBySuperVolunteers: true,
-        checkCompleted: () =>
-          this.state.campaignFormValues.title !== "" &&
-          this.state.campaignFormValues.dueBy !== null
+        checkCompleted: () => true
       },
       {
         title: "Contacts",
