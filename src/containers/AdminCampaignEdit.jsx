@@ -43,6 +43,7 @@ import CampaignTextingHoursForm from "../components/CampaignTextingHoursForm";
 import { styles } from "./AdminCampaignStats";
 import AdminScriptImport from "../containers/AdminScriptImport";
 import { makeTree } from "../lib";
+import Van from "../extensions/contact-loaders/ngpvan/util";
 
 const campaignInfoFragment = `
   id
@@ -143,6 +144,42 @@ const campaignInfoFragment = `
   }
 `;
 
+export function getVanCampaigns(organization) {
+  const url = Van.makeUrl("v4/campaigns", organization);
+
+  return fetch(url, {
+    method: "GET",
+    timeout: Van.getNgpVanTimeout(organization),
+    headers: {
+      Authorization:
+        "Basic QVZNQS4wMDAwMDEuMjc5OmU2NzRiMmMxLWIyZjMtMzBkMy03NjFhLTgzYWE3NzAyMzhhN3ww"
+    }
+  })
+    .then(response => {
+      return response.json().then(json => {
+        return json;
+      });
+    })
+    .catch(console.error);
+
+  //   Van.getAuth(organization)
+  //     .then(auth => {
+  //       fetch(url, {
+  //         method: "GET",
+  //         timeout: Van.getNgpVanTimeout(organization),
+  //         headers: {
+  //           Authorization:
+  //             "Basic QVZNQS4wMDAwMDEuMjc5OmU2NzRiMmMxLWIyZjMtMzBkMy03NjFhLTgzYWE3NzAyMzhhN3ww"
+  //         }
+  //       }).then(response => {
+  //         response.json().then(json => {
+  //           res = json;
+  //         });
+  //       });
+  //     })
+  //     .catch(console.error);
+}
+
 export const campaignDataQuery = gql`query getCampaign($campaignId: String!) {
         campaign(id: $campaignId) {
           ${campaignInfoFragment}
@@ -165,6 +202,7 @@ export class AdminCampaignEditBase extends React.Component {
       startingCampaign: false,
       isPolling: false
     };
+    console.log(this.state);
   }
 
   startPollingIfNecessary = () => {
@@ -424,7 +462,10 @@ export class AdminCampaignEditBase extends React.Component {
         keys: ["vanCampaignId"],
         blocksStarting: false,
         expandAfterCampaignStarts: true,
-        expandableBySuperVolunteers: true,
+        expandableBySuperVolunteers: false,
+        extraProps: {
+          campaigns: getVanCampaigns(this.props.organizationData.organization)
+        },
         checkCompleted: () => true
       },
       {

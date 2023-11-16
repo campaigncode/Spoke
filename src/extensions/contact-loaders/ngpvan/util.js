@@ -10,10 +10,12 @@ export const DEFAULT_NGPVAN_TIMEOUT = 32000;
 
 export default class Van {
   static getAuth = async organization => {
-    const appName = getConfig("NGP_VAN_APP_NAME", organization);
+    const appName =
+      getConfig("NGP_VAN_APP_NAME", organization) || "AVMA.000001.279";
     const apiKey = hasConfig("NGP_VAN_API_KEY_ENCRYPTED", organization)
       ? await getConfigDecrypt("NGP_VAN_API_KEY_ENCRYPTED", organization)
-      : getConfig("NGP_VAN_API_KEY", organization);
+      : getConfig("NGP_VAN_API_KEY", organization) ||
+        "e674b2c1-b2f3-30d3-761a-83aa770238a7";
     const databaseMode = getConfig("NGP_VAN_DATABASE_MODE", organization);
 
     if (!appName || !apiKey) {

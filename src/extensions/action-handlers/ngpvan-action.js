@@ -353,8 +353,11 @@ export async function getClientChoiceData(organization) {
     })
   );
 
-  const vanActions = [];
-  vanActions.push(...surveyResponses, ...activistCodes, ...canvassResponses);
+  const vanActions = [
+    ...surveyResponses,
+    ...activistCodes,
+    ...canvassResponses
+  ];
 
   return {
     data: `${JSON.stringify({ items: vanActions })}`,

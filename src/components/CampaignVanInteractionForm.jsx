@@ -5,7 +5,6 @@ import CampaignFormSectionHeading from "./CampaignFormSectionHeading";
 import GSForm from "./forms/GSForm";
 import GSSubmitButton from "./forms/GSSubmitButton";
 import * as yup from "yup";
-import { dataTest } from "../lib/attributes";
 import { Autocomplete } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 
@@ -29,54 +28,23 @@ const FormSchemaAfterStarted = {
     .nullable()
 };
 
-// function showSearch() {
-//     const { orgTexters } = this.props;
-//     const { texters } = this.formValues();
-
-//     const dataSource = orgTexters
-//       .filter(orgTexter => !texters.find(texter => texter.id === orgTexter.id))
-//       .filter(orgTexter => getHighestRole(orgTexter.roles) !== "SUSPENDED");
-
-//     const autocomplete = (
-//       <Autocomplete
-//         {...dataTest("texterSearch")}
-//         autoFocus
-//         getOptionLabel={({ displayName }) => displayName}
-//         style={inlineStyles.autocomplete}
-//         options={dataSource}
-//         renderInput={params => {
-//           return <TextField {...params} label="Search for texters to assign" />;
-//         }}
-//         onChange={(event, value) => {
-//           // If you're searching but get no match, value is a string
-//           // representing your search term, but we only want to handle matches
-//           if (typeof value === "object" && value !== null) {
-//             const texterId = value.id;
-//             const newTexter = this.props.orgTexters.find(
-//               texter => texter.id === texterId
-//             );
-//             this.onChange({
-//               texters: [
-//                 ...this.formValues().texters,
-//                 {
-//                   id: texterId,
-//                   firstName: newTexter.firstName,
-//                   assignment: {
-//                     contactsCount: 0,
-//                     needsMessageCount: 0
-//                   }
-//                 }
-//               ]
-//             });
-//           }
-//         }}
-//       />
-//     );
-//     return <div>{orgTexters.length > 0 ? autocomplete : null}</div>;
-//   }
-
 export default class CampaignVanInteractionForm extends React.Component {
+  state = {
+    options: [],
+    loaded: false
+  };
+
   render() {
+    const { campaigns } = this.props;
+
+    !this.state.loaded &&
+      campaigns.then(c =>
+        this.setState({
+          options: c.items,
+          loaded: true
+        })
+      );
+
     const formSchema = this.props.ensureComplete
       ? yup.object(FormSchemaAfterStarted)
       : yup.object(FormSchemaBeforeStarted);
@@ -87,16 +55,26 @@ export default class CampaignVanInteractionForm extends React.Component {
         <GSForm
           schema={formSchema}
           value={this.props.formValues}
-          onChange={this.props.onChange}
           onSubmit={this.props.onSubmit}
-          {...dataTest("campaignBasicsForm")}
         >
           <Autocomplete
             name="vanCampaignId"
             renderInput={params => {
               return <TextField {...params} label="Choose a campaign below" />;
             }}
-            options={["a", "b", "c"]}
+            value={
+              this.state.options.find(
+                c => c.campaignId == this.props.formValues.vanCampaignId
+              ) || ""
+            }
+            isOptionEqualToValue={(option, value) => {
+              return option.campaignId == value.campaignId;
+            }}
+            onChange={(e, value) => {
+              this.props.onChange({ vanCampaignId: `${value.campaignId}` });
+            }}
+            getOptionLabel={option => option.name}
+            options={this.state.options}
           />
           <Form.Submit
             as={GSSubmitButton}

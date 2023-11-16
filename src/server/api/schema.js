@@ -191,6 +191,7 @@ async function editCampaign(id, campaign, loaders, user, origCampaignRecord) {
     textingHoursStart,
     textingHoursEnd,
     timezone,
+    vanCampaignId,
     serviceManagers
   } = campaign;
   // some changes require ADMIN and we recheck below
@@ -219,7 +220,8 @@ async function editCampaign(id, campaign, loaders, user, origCampaignRecord) {
     messageservice_sid: messageserviceSid,
     batch_size: batchSize,
     response_window: responseWindow,
-    timezone
+    timezone,
+    van_campaign_id: vanCampaignId
   };
 
   Object.keys(campaignUpdates).forEach(key => {
