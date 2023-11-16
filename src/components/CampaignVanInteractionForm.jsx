@@ -8,12 +8,6 @@ import * as yup from "yup";
 import { Autocomplete } from "@material-ui/lab";
 import { TextField } from "@material-ui/core";
 
-// TODO
-// DONE: Update schema
-// DONE: Write autocomplete function (implemented using MUI component)
-// Pull VAN API in (fetch campaigns from server)
-// Make it only appear when VAN API keys are set
-
 const FormSchemaBeforeStarted = {
   vanCampaignId: yup
     .string()
@@ -35,7 +29,7 @@ export default class CampaignVanInteractionForm extends React.Component {
   };
 
   render() {
-    const { campaigns } = this.props;
+    const { campaigns, organization } = this.props;
 
     !this.state.loaded &&
       campaigns.then(c =>
@@ -65,7 +59,7 @@ export default class CampaignVanInteractionForm extends React.Component {
             value={
               this.state.options.find(
                 c => c.campaignId == this.props.formValues.vanCampaignId
-              ) || ""
+              ) || { name: "Loading..." }
             }
             isOptionEqualToValue={(option, value) => {
               return option.campaignId == value.campaignId;

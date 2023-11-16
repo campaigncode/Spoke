@@ -44,6 +44,7 @@ import { styles } from "./AdminCampaignStats";
 import AdminScriptImport from "../containers/AdminScriptImport";
 import { makeTree } from "../lib";
 import Van from "../extensions/contact-loaders/ngpvan/util";
+import "dotenv/config";
 
 const campaignInfoFragment = `
   id
@@ -151,8 +152,7 @@ export function getVanCampaigns(organization) {
     method: "GET",
     timeout: Van.getNgpVanTimeout(organization),
     headers: {
-      Authorization:
-        "Basic QVZNQS4wMDAwMDEuMjc5OmU2NzRiMmMxLWIyZjMtMzBkMy03NjFhLTgzYWE3NzAyMzhhN3ww"
+      Authorization: `Basic ${window.NGP_VAN_TOKEN}`
     }
   })
     .then(response => {
@@ -169,7 +169,7 @@ export function getVanCampaigns(organization) {
   //         timeout: Van.getNgpVanTimeout(organization),
   //         headers: {
   //           Authorization:
-  //             "Basic QVZNQS4wMDAwMDEuMjc5OmU2NzRiMmMxLWIyZjMtMzBkMy03NjFhLTgzYWE3NzAyMzhhN3ww"
+  //             "Basic <TOKEN>"
   //         }
   //       }).then(response => {
   //         response.json().then(json => {
@@ -202,7 +202,6 @@ export class AdminCampaignEditBase extends React.Component {
       startingCampaign: false,
       isPolling: false
     };
-    console.log(this.state);
   }
 
   startPollingIfNecessary = () => {
@@ -464,7 +463,8 @@ export class AdminCampaignEditBase extends React.Component {
         expandAfterCampaignStarts: true,
         expandableBySuperVolunteers: false,
         extraProps: {
-          campaigns: getVanCampaigns(this.props.organizationData.organization)
+          campaigns: getVanCampaigns(this.props.organizationData.organization),
+          organization: this.props.organizationData.organization
         },
         checkCompleted: () => true
       },
