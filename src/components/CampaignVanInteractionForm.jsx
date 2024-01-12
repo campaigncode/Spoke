@@ -32,6 +32,7 @@ export default class CampaignVanInteractionForm extends React.Component {
     const { campaigns, organization } = this.props;
 
     !this.state.loaded &&
+      campaigns &&
       campaigns.then(c =>
         this.setState({
           options: c.items,
