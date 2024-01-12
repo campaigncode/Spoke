@@ -41,6 +41,7 @@ export function clientChoiceDataCacheKey() {
 }
 
 export const postCanvassResponse = async (contact, organization, bodyInput) => {
+  console.log(contact, organization, bodyInput);
   let vanId;
   let vanPhoneId;
   try {

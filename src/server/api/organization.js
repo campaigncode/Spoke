@@ -15,6 +15,7 @@ import {
   getServiceMetadata
 } from "../../extensions/service-vendors";
 import { getServiceManagerData } from "../../extensions/service-managers";
+import Van from "../../extensions/contact-loaders/ngpvan/util";
 
 export const ownerConfigurable = {
   // ACTION_HANDLERS: 1,
@@ -83,6 +84,28 @@ export const resolvers = {
     uuid: async (organization, _, { user }) => {
       await accessRequired(user, organization.id, "SUPERVOLUNTEER");
       return organization.uuid;
+    },
+    vanCampaigns: async (organization, _, { user }) => {
+      await accessRequired(user, organization.id, "ADMIN");
+      try {
+        const response = await fetch(
+          Van.makeUrl("v4/campaigns", organization),
+          {
+            method: "GET",
+            timeout: Van.getNgpVanTimeout(organization),
+            headers: {
+              Authorization: `Basic ${process.env.NGP_VAN_TOKEN}`
+            }
+          }
+        );
+        const json = await response.json();
+
+        console.log(json);
+        return json;
+      } catch (err) {
+        console.error(err);
+        return [];
+      }
     },
     optOuts: async (organization, _, { user }) => {
       await accessRequired(user, organization.id, "ADMIN");

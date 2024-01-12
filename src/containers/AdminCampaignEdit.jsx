@@ -44,7 +44,6 @@ import { styles } from "./AdminCampaignStats";
 import AdminScriptImport from "../containers/AdminScriptImport";
 import { makeTree } from "../lib";
 import Van from "../extensions/contact-loaders/ngpvan/util";
-import "dotenv/config";
 
 const campaignInfoFragment = `
   id
@@ -146,38 +145,11 @@ const campaignInfoFragment = `
 `;
 
 export function getVanCampaigns(organization) {
-  const url = Van.makeUrl("v4/campaigns", organization);
+  //   const url = Van.makeUrl("v4/campaigns", organization);
+  //   const timeout = Van.getNgpVanTimeout(organization);
 
-  return fetch(url, {
-    method: "GET",
-    timeout: Van.getNgpVanTimeout(organization),
-    headers: {
-      Authorization: `Basic ${window.NGP_VAN_TOKEN}`
-    }
-  })
-    .then(response => {
-      return response.json().then(json => {
-        return json;
-      });
-    })
-    .catch(console.error);
-
-  //   Van.getAuth(organization)
-  //     .then(auth => {
-  //       fetch(url, {
-  //         method: "GET",
-  //         timeout: Van.getNgpVanTimeout(organization),
-  //         headers: {
-  //           Authorization:
-  //             "Basic <TOKEN>"
-  //         }
-  //       }).then(response => {
-  //         response.json().then(json => {
-  //           res = json;
-  //         });
-  //       });
-  //     })
-  //     .catch(console.error);
+  console.log(organization);
+  //   return getVanCampaigns(url, timeout);
 }
 
 export const campaignDataQuery = gql`query getCampaign($campaignId: String!) {
@@ -463,7 +435,7 @@ export class AdminCampaignEditBase extends React.Component {
         expandAfterCampaignStarts: true,
         expandableBySuperVolunteers: false,
         extraProps: {
-          campaigns: getVanCampaigns(this.props.organizationData.organization),
+          campaigns: getVanCampaigns(this.props.organizationData),
           organization: this.props.organizationData.organization
         },
         checkCompleted: () => true

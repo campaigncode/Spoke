@@ -66,6 +66,7 @@ export const schema = gql`
     theme: JSON
     availableActions: [Action]
     settings: OrgSettings
+    vanCampaigns: JSON
     batchPolicies: [String]
     optOutMessage: String
     textingHoursEnforced: Boolean
