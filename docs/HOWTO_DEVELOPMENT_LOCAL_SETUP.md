@@ -1,55 +1,69 @@
 ## Getting started
 
 ---
+
 ### [Repository](https://github.com/StateVoicesNational/Spoke)
-1. If you have not already, Fork this repo then clone your forked copy. Then future pull requests can be made from your repo to Spoke. 
+
+1. If you have not already, Fork this repo then clone your forked copy. Then future pull requests can be made from your repo to Spoke.
+
 ```
-git clone <url of your forked repo>
+git clone https://github.com/campaigncode/Spoke
 ```
 
-2. change your pwd (present working directory) to the spoke directory before installations 
+2. change your pwd (present working directory) to the spoke directory before installations
+
 ```
-cd spoke
+cd Spoke
 ```
 
 3. You may use this opportunity to set the remote upstream to spoke's repo for future fetches.
+
 ```
 git remote add upstream https://github.com/StateVoicesNational/Spoke.git
-``` 
-   -  you can check that this is configured correctly to push to the origin and fetch from spoke's repo. 
-   ```
-   git remote -v
-   ```
-   Your origin and Upstream should appear configured correctly.
-   - this is a good time to take a look at [Syncing a Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) for full understanding.
+```
 
----
-### Downloading
+- you can check that this is configured correctly to push to the origin and fetch from spoke's repo.
 
-1. Install the Node version listed in `.nvmrc`. This can also be found here:[.nvmrc](https://github.com/StateVoicesNational/Spoke/blob/main/.nvmrc). 
-From the spoke directory:
+```
+git remote -v
+```
+
+Your origin and Upstream should appear configured correctly.
+
+- this is a good time to take a look at [Syncing a Fork](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/syncing-a-fork) for full understanding.
+
+1. Install the Node version listed in `.nvmrc`. This can also be found here:[.nvmrc](https://github.com/MoveOnOrg/Spoke/blob/main/.nvmrc).
+   From the spoke directory:
+
+1) Install the Node version listed in `.nvmrc`. This can also be found here:[.nvmrc](https://github.com/StateVoicesNational/Spoke/blob/main/.nvmrc).
+   From the spoke directory:
    ```
    nvm install
    nvm use
    ```
-   - this assumes you have nvm (node version manager) installed.  If not, either
-   * run 
+   - this assumes you have nvm (node version manager) installed. If not, either
+   * run
    ```
    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.1/install.sh | bash
    ```
-   * or visit [NVM](https://github.com/nvm-sh/nvm/blob/master/README.md), a great resource for installation if your terminal isn't recognizing nvm or if you'd like more background on these commands.
-   - at this time of this writing, nvm install will install a version above 17 but we want to run 12.  Yarn will have to be installed again, even if you have yarn installed already, as it will need to be compatible with this version of nvm. 
-    
-2. Install yarn.
+   - or visit [NVM](https://github.com/nvm-sh/nvm/blob/master/README.md), a great resource for installation if your terminal isn't recognizing nvm or if you'd like more background on these commands.
+   * at this time of this writing, nvm install will install a version above 17 but we want to run 12. Yarn will have to be installed again, even if you have yarn installed already, as it will need to be compatible with this version of nvm.
+2) Install yarn.
 
-- Yarn is a package manager that will download all required packages to run Spoke.
-- Install using the [directions provided by Yarn](https://yarnpkg.com/en/docs/install).
+   ```
+   curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+   ```
 
-3. Install the packages.
    ```
-   yarn install
+   nvm install node
+   nvm use node
    ```
-4. Create a real environment file:
+
+3) Install the packages.
+   ```
+   npm i
+   ```
+4) Create a real environment file:
    ```
    cp .env.example .env
    ```
@@ -57,53 +71,29 @@ From the spoke directory:
 - This creates a copy of `.env.example`, but renames it `.env` so the system will use it. _Make sure you use this new file._
 
 ---
+
 ### Your `.env` file
 
-We use environment variables to allow instance admins to customize their Spoke experience. If you end up doing dev work on an area that is configured through environment variables, it will be helpful to be familiar with the patterns used. Because of this, we recommend that you take a look at the [environment variable reference](REFERENCE-environment_variables.md) to get a lay of the land.  
+We use environment variables to allow instance admins to customize their Spoke experience. If you end up doing dev work on an area that is configured through environment variables, it will be helpful to be familiar with the patterns used. Because of this, we recommend that you take a look at the [environment variable reference](REFERENCE-environment_variables.md) to get a lay of the land.
+
+Make sure environment variable `JOBS_SAME_PROCESS=1` is set.
+Make sure `SUPPRESS_SELF_INVITE=` is NOT set.
+Set `DEFAULT_SERVICE=fakeservice`.
 
 ---
-### Your Database
-
-We have 2 recommended ways to set up your database for your development environment and you can choose either based on your preference or comfort level. You can use sqlite (which is the default DB so you can proceed to the next section if you choose this) or postgres. At this time, all production Spoke instances use postgres.
-
-If you're using postgres (see below), you should set `DB_TYPE=pg` and if you're using sqlite, you don't need to change anything about your .env file.
-
-
-#### Using Docker to run postgres (optional)
-
-Docker is optional, but can help with a consistent development environment using postgres. You can also ([set up postgres without docker](HOWTO_USE_POSTGRESQL.md)) but we recommend the docker route.
-
-1. Install docker and docker compose
-
-- Docker allows you to run apps in containers and can be installed [here with Docker's instructions](https://docs.docker.com/desktop/)
-- Docker Compose is the tool used to create and run docker configurations. If you installed Docker on Mac, you already have Docker Compose, if you're using Linux or Windows you can install Docker Compose [with these instructions](https://docs.docker.com/compose/install/)
-
-2. Make sure Docker is running on your machine and then build and run Spoke with `docker-compose up -d` to run redis and postgres in the background
-   - You can stop docker compose at any time with `docker-compose down`, and data will persist next time you run `docker-compose up`.
-
-3. Run `./dev-tools/create-test-database` to populate the test database
-
-4. When done testing, clean up resources with `docker-compose down`, or `docker-compose down -v` to **_completely destroy_** your Postgres database & Redis datastore volumes.
 
 ### Getting the app running
 
 At this point, you should be ready to start your app in development mode.
 
 1. Run `yarn dev` to create and populate the tables.
-   - Wait until you see both "Node app is running ..." and "webpack: Compiled successfully." before attempting to connect. (make sure environment variable `JOBS_SAME_PROCESS=1`)
+   - Wait until you see both "Node app is running ..." and "webpack: Compiled successfully." before attempting to connect. ()
 2. Go to `http://localhost:3000` to load the app. (Note: the terminal will say it's running on port 8090 -- don't believe it :-)
-3. As long as you leave `SUPPRESS_SELF_INVITE=` blank in your `.env` you should be able to invite yourself from the homepage by signing up with your information. (Notice the URL address in your window has an invite page parameter for the next route)
-   - If you DO set that variable, then spoke will be invite-only and you'll need to generate an invite. Run:
-     ```
-     echo "INSERT INTO invite (hash,is_valid) VALUES ('E4502B28-301E-4E63-9A97-ACA14E8160C8', 1);" |sqlite3 mydb.sqlite
-     # Note: When doing this with PostgreSQL, you would replace the `1` with `true`
-     ```
-   - Then use the generated key to visit an invite link, e.g.: http://localhost:3000/invite/E4502B28-301E-4E63-9A97-ACA14E8160C8. This should redirect you to the login screen. Use the "Sign Up" option to create your account.
-4. You should then be prompted to create an organization. Create it.
-5. Once you've created your organization, we recommend setting the env var `SUPPRESS_SELF_INVITE=1` so you don't get prompted to create a new org every time you log in
-6. See the [Admin](https://youtu.be/PTMykMX8gII) and [Texter](https://youtu.be/EqE1UDvKGco) demos to learn about how Spoke works.
-7. See [the development guidelines](EXPLANATION-development-guidelines.md)
-8. See [How to Run Tests](HOWTO-run_tests.md)
+3. You should then be prompted to create an organization. Create it.
+4. **Once you've created your organization, set the env var `SUPPRESS_SELF_INVITE=1` so you don't get prompted to create a new org every time you log in**
+5. See the [Admin](https://youtu.be/PTMykMX8gII) and [Texter](https://youtu.be/EqE1UDvKGco) demos to learn about how Spoke works.
+6. See [the development guidelines](EXPLANATION-development-guidelines.md)
+7. See [How to Run Tests](HOWTO-run_tests.md)
 
 ### SMS and Twilio in development
 
@@ -114,7 +104,7 @@ To simulate receiving a reply from a contact you can use the Send Replies utilit
 If you need to use Twilio in development but with live keys, click [here](HOWTO_INTEGRATE_TWILIO.md) for instructions.
 When using instructions, please remember that references to NGROK urls should change to your Heroku app url.
 
-### ngrok
+### ngrok (Optional for testing)
 
 If you want to test sending and receiving text messages with a real SMS provider in your local development environment, use [ngrok](https://ngrok.com/) to allow the vendor to communicate with Spoke.
 

@@ -41,6 +41,7 @@ export function clientChoiceDataCacheKey() {
 }
 
 export const postCanvassResponse = async (contact, organization, bodyInput) => {
+  console.log(contact, organization, bodyInput);
   let vanId;
   let vanPhoneId;
   try {
@@ -353,8 +354,11 @@ export async function getClientChoiceData(organization) {
     })
   );
 
-  const vanActions = [];
-  vanActions.push(...surveyResponses, ...activistCodes, ...canvassResponses);
+  const vanActions = [
+    ...surveyResponses,
+    ...activistCodes,
+    ...canvassResponses
+  ];
 
   return {
     data: `${JSON.stringify({ items: vanActions })}`,

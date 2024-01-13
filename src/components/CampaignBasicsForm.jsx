@@ -13,7 +13,10 @@ import { dataTest } from "../lib/attributes";
 
 const FormSchemaBeforeStarted = {
   title: yup.string().required(),
-  description: yup.string().required(),
+  description: yup
+    .string()
+    .optional()
+    .default("No description provided"),
   dueBy: yup
     .mixed()
     .required()
@@ -33,7 +36,10 @@ const FormSchemaBeforeStarted = {
 
 const FormSchemaAfterStarted = {
   title: yup.string().required(),
-  description: yup.string().required(),
+  description: yup
+    .string()
+    .optional()
+    .default("No description provided"),
   dueBy: yup.mixed().required(),
   logoImageUrl: yup
     .string()
@@ -85,7 +91,7 @@ export default class CampaignBasicsForm extends React.Component {
             as={GSTextField}
             {...dataTest("description")}
             name="description"
-            label="Description (required)"
+            label="Description"
             helpertext="Get out the vote"
             fullWidth
           />

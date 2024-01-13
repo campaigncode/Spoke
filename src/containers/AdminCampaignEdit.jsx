@@ -32,6 +32,7 @@ import CampaignMessagingServiceForm from "../components/CampaignMessagingService
 import CampaignContactsChoiceForm from "../components/CampaignContactsChoiceForm";
 import CampaignTextersForm from "../components/CampaignTextersForm";
 import CampaignInteractionStepsForm from "../components/CampaignInteractionStepsForm";
+import CampaignVanInteractionForm from "../components/CampaignVanInteractionForm";
 import CampaignCannedResponsesForm from "../components/CampaignCannedResponsesForm";
 import CampaignDynamicAssignmentForm from "../components/CampaignDynamicAssignmentForm";
 import CampaignTexterUIForm from "../components/CampaignTexterUIForm";
@@ -42,6 +43,7 @@ import CampaignTextingHoursForm from "../components/CampaignTextingHoursForm";
 import { styles } from "./AdminCampaignStats";
 import AdminScriptImport from "../containers/AdminScriptImport";
 import { makeTree } from "../lib";
+import Van from "../extensions/contact-loaders/ngpvan/util";
 
 const campaignInfoFragment = `
   id
@@ -64,6 +66,7 @@ const campaignInfoFragment = `
   textingHoursEnforced
   textingHoursStart
   textingHoursEnd
+  vanCampaignId
   texterUIConfig {
     options
     sideboxChoices
@@ -140,6 +143,14 @@ const campaignInfoFragment = `
     count
   }
 `;
+
+export function getVanCampaigns(organization) {
+  //   const url = Van.makeUrl("v4/campaigns", organization);
+  //   const timeout = Van.getNgpVanTimeout(organization);
+
+  console.log(organization);
+  //   return getVanCampaigns(url, timeout);
+}
 
 export const campaignDataQuery = gql`query getCampaign($campaignId: String!) {
         campaign(id: $campaignId) {
@@ -414,8 +425,20 @@ export class AdminCampaignEditBase extends React.Component {
         expandableBySuperVolunteers: true,
         checkCompleted: () =>
           this.state.campaignFormValues.title !== "" &&
-          this.state.campaignFormValues.description !== "" &&
           this.state.campaignFormValues.dueBy !== null
+      },
+      {
+        title: "VAN Integration",
+        content: CampaignVanInteractionForm,
+        keys: ["vanCampaignId"],
+        blocksStarting: false,
+        expandAfterCampaignStarts: true,
+        expandableBySuperVolunteers: false,
+        extraProps: {
+          campaigns: getVanCampaigns(this.props.organizationData),
+          organization: this.props.organizationData.organization
+        },
+        checkCompleted: () => true
       },
       {
         title: "Contacts",
@@ -1048,7 +1071,6 @@ export class AdminCampaignEditBase extends React.Component {
                   <Button
                     variant="contained"
                     color="secondary"
-                    variant="outlined"
                     startIcon={<CancelIcon />}
                     onClick={() => this.handleDeleteJob(jobId)}
                   >

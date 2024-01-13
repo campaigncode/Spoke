@@ -137,6 +137,7 @@ export default function renderIndex(html, css, assetMap) {
       window.ASSIGNMENT_CONTACTS_SIDEBAR=${getConfig(
         "ASSIGNMENT_CONTACTS_SIDEBAR"
       )}
+      window.NGP_VAN_TOKEN='${getConfig("NGP_VAN_TOKEN")}'
     </script>
     <script src="${assetMap["bundle.js"]}"></script>
   </body>

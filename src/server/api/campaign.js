@@ -308,6 +308,7 @@ export const resolvers = {
         "description",
         "isStarted",
         "isArchived",
+        "vanCampaignId",
         "useDynamicAssignment",
         "introHtml",
         "primaryColor",

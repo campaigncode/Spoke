@@ -84,6 +84,7 @@ const rootSchema = gql`
     batchPolicies: [String]
     responseWindow: Float
     ingestMethod: String
+    vanCampaignId: String
     contactData: String
     organizationId: String
     texters: [TexterInput]
